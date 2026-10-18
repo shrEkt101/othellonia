@@ -1,0 +1,1 @@
+# goal: use minmax to figure out which moves are optimal
