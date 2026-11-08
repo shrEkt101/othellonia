@@ -19,9 +19,9 @@ def ask_input(turn):
 def main():
     """
     Main flow:
-    1. check winner (update pass count)
-    2. play move (flip)
-    3. update turn (back to step 1)
+    1. play move (flip)
+    2. check winner
+        2.1 update turn
     """
     board = Board()
     board.board = [
@@ -49,6 +49,7 @@ def main():
                 break
         board.move(x, y)
         winner = board.winner()
+        board.turn *= -1
     board.show_board()
     print(winner)
 

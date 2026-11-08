@@ -99,9 +99,14 @@ class Board:
             i += y_axis
             j += x_axis
 
-        # you cannot have the first condition be true and the second false
-        # beacuse for you to have flipped something, your piece ont he other side had to be on the board, and the search stops as soon as you find your own piece
-        if len(checked) > 0 and self.board[row + i][col + j] == own:
+        # print(checked, row, col, i, j, y_axis, x_axis)
+        # self.show_board()
+        if (
+            len(checked) > 0
+            and (0 <= row + i <= max_coord)
+            and (0 <= col + j <= max_coord)
+            and self.board[row + i][col + j] == own
+        ):
             # print("flipping")
             for coord in checked:
                 # print(coord)
@@ -133,6 +138,8 @@ class Board:
             self.flipper(row, col, -1, -1)
             self.flipper(row, col, 1, -1)
             self.flipper(row, col, -1, 1)
+
+        return
 
     def count(self):
         black = 0
@@ -172,8 +179,8 @@ class Board:
             if len(temp.possible_moves()) == 0:
                 return check_winning()
             else:
-                # if opp has move give turn to them
-                self.turn *= -1
+                # if opp has move give turn to them outside method
+                pass
         return None
 
 
