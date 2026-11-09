@@ -18,7 +18,14 @@ import copy
 
 class MinMax:
     def __init__(self):
+        # TODO make table keys match up to rotation, reflection, and transposition
+        # assuming 10,000 positions per 3 seconds, it takes up to 356 hours to search 2^32 positions
+        # upper bound for time is (2^m)/r, where m is (# open squares) and r is (# pos searched)/sec
         self.table = {}
+
+    def save_table(self, path="table.csv"):
+        # TODO find way to export table, or not use a table at all
+        pass
 
     def move_evals(self, board: Board, maximizer=True, verbose=False):
         """
@@ -53,6 +60,9 @@ class MinMax:
                 #     # current POV is white's
                 #     return -winner
                 self.table[str(board.board)] = winner
+                self.save_table()
+                # print(board.count())
+                # print(len(self.table))
                 return winner
             else:
                 # evaluate for each move available and return the max or min
@@ -69,6 +79,7 @@ class MinMax:
                     temp.turn *= -1
                     result = self.move_evals(temp, next_player, verbose)
                     self.table[str(board.board)] = result
+                    self.save_table()
                     return result
 
                 # print(possible)
@@ -79,6 +90,7 @@ class MinMax:
                     temp.turn *= -1
                     result = self.move_evals(temp, next_player, verbose)
                     self.table[str(temp.board)] = result
+                    self.save_table()
                     evals.append(result)
                 final = None
                 if maximizer:
@@ -89,15 +101,23 @@ class MinMax:
 
 
 if __name__ == "__main__":
+    # pickle was too unrealiable --> got 'pickle data was truncated' error
+    import time
+
     board = Board()
     board.board = [
-        [" ", " ", " ", " ", " ", " "],
-        [" ", " ", " ", " ", " ", " "],
-        [" ", " ", "W", "W", " ", " "],
-        [" ", " ", "W", "W", " ", " "],
-        [" ", " ", " ", " ", " ", " "],
-        [" ", " ", " ", " ", " ", " "],
+        [" ", " ", "W", " ", " ", " "],
+        [" ", " ", "W", " ", " ", " "],
+        [" ", " ", "W", "B", "B", "B"],
+        [" ", "B", "W", "W", " ", " "],
+        ["B", " ", " ", "W", " ", " "],
+        [" ", " ", " ", "W", " ", " "],
     ]
     minmax = MinMax()
-    print(minmax.move_evals(board, True, True))
-    print(minmax.table.values())
+
+    start, start_cpu = time.time(), time.process_time()
+    print(minmax.move_evals(board, True, False))
+    print(f"{len(minmax.table)} positions searched")
+    end, end_cput = time.time(), time.process_time()
+
+    print(f"took {end-start} wall time, {end_cput-start_cpu} cpu time")

@@ -106,6 +106,27 @@ class TestBoard(unittest.TestCase):
         expected = []
         self.assertEqual(board.possible_moves(), expected)
 
+    def testBoardFlip5(self):
+        board = Board()
+        board.board = [
+            [" ", " ", " ", " ", " ", " "],
+            [" ", " ", " ", " ", " ", " "],
+            [" ", " ", " ", "B", " ", " "],
+            [" ", " ", " ", "W", " ", " "],
+            [" ", " ", " ", " ", " ", " "],
+            [" ", " ", "B", "W", " ", " "],
+        ]
+        board.move(4, 3)
+        expected = [
+            [" ", " ", " ", " ", " ", " "],
+            [" ", " ", " ", " ", " ", " "],
+            [" ", " ", " ", "B", " ", " "],
+            [" ", " ", " ", "B", " ", " "],
+            [" ", " ", " ", "B", " ", " "],
+            [" ", " ", "B", "W", " ", " "],
+        ]
+        self.assertEqual(board.board, expected)
+
     def testWinner1(self):
         """
         if neither side can play anything, winner can be decided
